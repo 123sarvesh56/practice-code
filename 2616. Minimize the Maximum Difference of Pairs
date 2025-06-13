@@ -1,0 +1,39 @@
+import java.util.Arrays;
+
+class Solution {
+    public int minimizeMax(int[] nums, int p) {
+        Arrays.sort(nums);
+        int low = 0;
+        int high = nums[nums.length - 1] - nums[0];
+        int result = high;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (canFormPairs(nums, p, mid)) {
+                result = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return result;
+    }
+
+    // Greedy check if we can form p non-overlapping pairs with diff <= maxDiff
+    private boolean canFormPairs(int[] nums, int p, int maxDiff) {
+        int count = 0;
+        int i = 1;
+
+        while (i < nums.length) {
+            if (nums[i] - nums[i - 1] <= maxDiff) {
+                count++;
+                i += 2; // use both nums[i-1] and nums[i]
+            } else {
+                i++;
+            }
+        }
+
+        return count >= p;
+    }
+}
